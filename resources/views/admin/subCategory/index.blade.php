@@ -1,25 +1,26 @@
 @extends('admin.master')
 
-@section('title', 'Manage Sub-Category')
+@section('title', 'Manage Sub Category')
 
 @section('body')
     <div class="page-header">
         <div>
-            <h1 class="page-title">Sub-Category</h1>
+            <h1 class="page-title">Sub Category</h1>
         </div>
         <div class="ms-auto pageheader-btn">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0);">Add Sub-Category</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Manage Sub-Category</li>
+                <li class="breadcrumb-item"><a href="javascript:void(0);">Add Sub Category</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Sub Category</li>
             </ol>
         </div>
     </div>
+
     <!-- Row -->
     <div class="row row-sm">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header border-bottom">
-                    <h3 class="card-title">Basic Datatable</h3>
+                    <h3 class="card-title">Sub Category Manage</h3>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -35,14 +36,23 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            @foreach($subCategories as $subCategory)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$subCategory->name}}</td>
+                                    <td>{{$subCategory->description}}</td>
+                                    <td><img src="{{asset($subCategory->image)}}" alt="" width="50px" height="50px"></td>
+                                    <td>{{$subCategory->status}}</td>
+                                    <td>
+                                        <a href="{{route('subCategory.edit', ['id'=>$subCategory->id])}}" class="btn btn-success btn-sm rounded-0">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a href="{{route('subCategory.delete', ['id'=>$subCategory->id])}}" class="btn btn-danger btn-sm rounded-0">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
