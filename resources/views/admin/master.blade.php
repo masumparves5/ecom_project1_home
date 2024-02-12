@@ -1420,6 +1420,10 @@
 <script src="{{asset('/')}}admin-assets/assets/plugins/datatable/js/dataTables.bootstrap5.js"></script>
 <script src="{{asset('/')}}admin-assets/assets/plugins/datatable/dataTables.responsive.min.js"></script>
 
+<!-- INTERNAL Summernote Editor js -->
+<script src="{{asset('/')}}admin-assets/assets/plugins/summernote-editor/summernote1.js"></script>
+<script src="{{asset('/')}}admin-assets/assets/js/summernote.js"></script>
+
 <!-- INDEX JS -->
 <script src="{{asset('/')}}admin-assets/assets/js/index1.js"></script>
 <script src="{{asset('/')}}admin-assets/assets/js/index.js"></script>

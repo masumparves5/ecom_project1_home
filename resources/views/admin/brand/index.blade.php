@@ -46,7 +46,7 @@
                                         <a href="{{route('brand.edit', ['id'=>$brand->id])}}" class="btn btn-success btn-sm rounded-0">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a href="{{route('brand.delete', ['id'=>$brand->id])}}" class="btn btn-danger btn-sm rounded-0">
+                                        <a href="{{route('brand.delete', ['id'=>$brand->id])}}" onclick="return confirm('Are you sure to delete this');" class="btn btn-danger btn-sm rounded-0">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

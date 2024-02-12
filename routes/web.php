@@ -55,10 +55,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::get('/unit/manage', [UnitController::class, 'index'])->name('unit.manage');
     Route::get('/unit/add', [UnitController::class, 'create'])->name('unit.add');
+    Route::post('/unit/store', [UnitController::class, 'store'])->name('unit.store');
+    Route::get('/unit/edit/{id}', [UnitController::class, 'edit'])->name('unit.edit');
+    Route::post('/unit/update/{id}', [UnitController::class, 'update'])->name('unit.update');
+    Route::get('/unit/delete/{id}', [UnitController::class, 'delete'])->name('unit.delete');
 
 
     Route::get('/product/manage', [ProductController::class, 'index'])->name('product.manage');
     Route::get('/product/add', [ProductController::class, 'create'])->name('product.add');
+    Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
+    Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::get('/product/detail/{id}', [ProductController::class, 'detail'])->name('product.detail');
+    Route::post('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::get('/product/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
 
 
     Route::get('/user/manage', [UserController::class, 'index'])->name('user.manage');

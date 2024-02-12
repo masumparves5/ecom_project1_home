@@ -28,6 +28,7 @@
                             <thead>
                             <tr>
                                 <th class="wd-15p border-bottom-0">SL No</th>
+                                <th class="wd-15p border-bottom-0">Category Name</th>
                                 <th class="wd-15p border-bottom-0">Name</th>
                                 <th class="wd-20p border-bottom-0">Description</th>
                                 <th class="wd-15p border-bottom-0">Image</th>
@@ -39,6 +40,7 @@
                             @foreach($subCategories as $subCategory)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
+                                    <td>{{isset($subCategory->category->name) ? $subCategory->category->name : ' '}}</td>
                                     <td>{{$subCategory->name}}</td>
                                     <td>{{$subCategory->description}}</td>
                                     <td><img src="{{asset($subCategory->image)}}" alt="" width="50px" height="50px"></td>
@@ -47,7 +49,7 @@
                                         <a href="{{route('subCategory.edit', ['id'=>$subCategory->id])}}" class="btn btn-success btn-sm rounded-0">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a href="{{route('subCategory.delete', ['id'=>$subCategory->id])}}" class="btn btn-danger btn-sm rounded-0">
+                                        <a href="{{route('subCategory.delete', ['id'=>$subCategory->id])}}" onclick="return confirm('Are you sure to delete this');" class="btn btn-danger btn-sm rounded-0">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

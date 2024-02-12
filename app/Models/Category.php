@@ -12,22 +12,22 @@ class Category extends Model
 
     private static $category, $image, $imageName, $imageUrl, $directory, $extension;
 
-    public static function newCategory($request)
+    private static function getImageUrl($image)
     {
-        self::$image        = $request->file('image');
-        self::$extension    = self::$image->getClientOriginalExtension();
+        self::$extension    = $image->getClientOriginalExtension();
         self::$imageName    = time().'.'.self::$extension;
         self::$directory    = 'upload/category-image/';
-        self::$image->move(self::$directory, self::$imageName);
+        $image->move(self::$directory, self::$imageName);
         self::$imageUrl     =self::$directory.self::$imageName;
-
-        self::$category = New Category();
-        self::$category->name           =$request->name;
-        self::$category->description    =$request->description;
-        self::$category->image          =self::$imageUrl;
-        self::$category->status         = $request->status;
-        self::$category->save();
+        return self::$imageUrl;
     }
+
+
+    public static function newCategory($request)
+    {
+        self::saveBasicInfo(New Category(), $request, self::getImageUrl($request->file('image')));
+    }
+
 
     public static function updateCategory($request, $id)
     {
@@ -35,37 +35,39 @@ class Category extends Model
 
         if ($request->file('image'))
         {
-            if (file_exists(self::$category->image))
-            {
-                unlink(self::$category->image);
-            }
-
-            self::$image        = $request->file('image');
-            self::$extension    = self::$image->getClientOriginalExtension();
-            self::$imageName    = time().'.'.self::$extension;
-            self::$directory    = 'upload/category-image/';
-            self::$image->move(self::$directory, self::$imageName);
-            self::$imageUrl     =self::$directory.self::$imageName;
+            self::deleteImageFormFolder(self::$category->image);
+            self::$imageUrl = self::getImageUrl($request->file('image'));
         }
         else
         {
             self::$imageUrl = self::$category->image;
         }
-
-        self::$category->name           =$request->name;
-        self::$category->description    =$request->description;
-        self::$category->image          =self::$imageUrl;
-        self::$category->status         = $request->status;
-        self::$category->save();
+        self::saveBasicInfo(self::$category, $request, self::$imageUrl);
     }
+
 
     public static function deleteCategory($id)
     {
         self::$category = Category::find($id);
-        if (file_exists(self::$category->image))
-        {
-            unlink(self::$category->image);
-        }
+        self::deleteImageFormFolder(self::$category->image);
         self::$category->delete();
+    }
+
+
+    private static function saveBasicInfo($category, $request, $imageUrl)
+    {
+        $category->name           = $request->name;
+        $category->description    = $request->description;
+        $category->image          = $imageUrl;
+        $category->status         = $request->status;
+        $category->save();
+    }
+
+    private static function deleteImageFormFolder($imageUrl)
+    {
+        if (file_exists($imageUrl))
+        {
+            unlink($imageUrl);
+        }
     }
 }

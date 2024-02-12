@@ -69,4 +69,8 @@ class SubCategory extends Model
             unlink($imageUrl);
         }
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
