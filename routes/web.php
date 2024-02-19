@@ -16,8 +16,8 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', [ShopGridController::class, 'index']) ->name('home');
-Route::get('/product-category', [ShopGridController::class, 'category']) ->name('product.category');
-Route::get('/product-detail', [ShopGridController::class, 'product']) ->name('product.detail');
+Route::get('/product-category/{id}', [ShopGridController::class, 'category']) ->name('product.category');
+Route::get('/product-detail/{id}', [ShopGridController::class, 'product']) ->name('single.product');
 Route::get('/card-show', [CardController::class, 'index']) ->name('card.show');
 Route::get('/checkout', [CheckoutController::class, 'index']) ->name('checkout');
 Route::get('/customer/login', [CustomerAuthController::class, 'login']) ->name('customer.login');

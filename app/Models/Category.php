@@ -70,4 +70,9 @@ class Category extends Model
             unlink($imageUrl);
         }
     }
+
+    public function subCategory()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
 }
