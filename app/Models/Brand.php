@@ -20,6 +20,7 @@ class Brand extends Model
         self::$image->move(self::$directory, self::$imageName);
         self::$imageUrl     =self::$directory.self::$imageName;
 
+
         self::$brand = New Brand();
         self::$brand->name           =$request->name;
         self::$brand->description    =$request->description;

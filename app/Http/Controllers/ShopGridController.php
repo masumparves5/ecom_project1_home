@@ -19,6 +19,13 @@ class ShopGridController extends Controller
             'categories' => Category::all()
         ]);
     }
+    public function subCategory($id)
+    {
+        return view('frontEnd.category.index', [
+            'products' => Product::where('sub_category_id',$id)->get(),
+            'categories' => Category::all()
+        ]);
+    }
     public function product($id)
     {
         return view('frontEnd.product.index', [

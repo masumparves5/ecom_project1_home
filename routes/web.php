@@ -17,11 +17,29 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', [ShopGridController::class, 'index']) ->name('home');
 Route::get('/product-category/{id}', [ShopGridController::class, 'category']) ->name('product.category');
+Route::get('/product-sub-category/{id}', [ShopGridController::class, 'subCategory']) ->name('product.subCategory');
 Route::get('/product-detail/{id}', [ShopGridController::class, 'product']) ->name('single.product');
+
+Route::post('/card-add/{id}', [CardController::class, 'addCart']) ->name('card.add');
 Route::get('/card-show', [CardController::class, 'index']) ->name('card.show');
+Route::post('/cart-update/{row_id}', [CardController::class, 'cartUpdate']) ->name('cart.update');
+Route::get('/cart-delete/{row_id}', [CardController::class, 'cartDelete']) ->name('cart.delete');
+
 Route::get('/checkout', [CheckoutController::class, 'index']) ->name('checkout');
+
+Route::post('/new/order', [CheckoutController::class, 'newOrder']) ->name('newOrder');
+Route::get('/complete-order', [CheckoutController::class, 'completeOrder']) ->name('complete.order');
+
 Route::get('/customer/login', [CustomerAuthController::class, 'login']) ->name('customer.login');
-Route::get('/customer/register', [CustomerAuthController::class, 'login']) ->name('customer.register');
+Route::post('/customer/login', [CustomerAuthController::class, 'loginCheck']) ->name('customer.login');
+Route::get('/customer/register', [CustomerAuthController::class, 'register']) ->name('customer.register');
+Route::post('/customer/register', [CustomerAuthController::class, 'CustomerRegister']) ->name('customer.register');
+
+Route::middleware(['customer'])->group(function (){
+    Route::get('/customer-dashboard', [CustomerAuthController::class, 'dashboard']) ->name('customer.dashboard');
+    Route::get('/customer/logout', [CustomerAuthController::class, 'logout']) ->name('customer.logout');
+});
+
 
 
 
@@ -63,11 +81,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::get('/product/manage', [ProductController::class, 'index'])->name('product.manage');
     Route::get('/product/add', [ProductController::class, 'create'])->name('product.add');
+    Route::get('/get-sub-category-by-category-id', [ProductController::class, 'getSubCategoryByCategory'])->name('get-sub-category-by-category-id');
     Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
     Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
     Route::get('/product/detail/{id}', [ProductController::class, 'detail'])->name('product.detail');
     Route::post('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::get('/product/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+
+    Route::get('/manage/order', [OrderController::class, 'index'])->name('manage.order');
+    Route::get('/order/detail/{id}', [OrderController::class, 'orderDetail'])->name('order.detail');
+    Route::get('/order/invoice/{id}', [OrderController::class, 'orderInvoice'])->name('order.invoice');
+    Route::get('/order/invoice1/{id}', [OrderController::class, 'orderInvoice1'])->name('order.invoice1');
+    Route::get('/order/edit/{id}', [OrderController::class, 'orderEdit'])->name('order.edit');
+    Route::post('/order/update', [OrderController::class, 'orderUpdate'])->name('order.update');
 
 
     Route::get('/user/manage', [UserController::class, 'index'])->name('user.manage');

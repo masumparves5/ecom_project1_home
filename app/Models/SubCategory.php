@@ -8,22 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class SubCategory extends Model
 {
     use HasFactory;
-    private static $subCategory, $image, $imageName, $imageUrl, $directory, $extension;
+    private static $subCategory, $image, $imageUrl;
 
-    private static function getImageUrl($image)
-    {
-        self::$extension    = $image->getClientOriginalExtension();
-        self::$imageName    = time().'.'.self::$extension;
-        self::$directory    = 'upload/subCategory-image/';
-        $image->move(self::$directory, self::$imageName);
-        self::$imageUrl     =self::$directory.self::$imageName;
-        return self::$imageUrl;
-    }
 
 
     public static function newSubCategory($request)
     {
-        self::saveBasicInfo(New SubCategory(), $request, self::getImageUrl($request->file('image')));
+        self::saveBasicInfo(New SubCategory(), $request, getFileUrl($request->file('image'), 'upload/subCategory-image/'));
     }
 
 
@@ -33,8 +24,8 @@ class SubCategory extends Model
 
         if ($request->file('image'))
         {
-            self::deleteImageFormFolder(self::$subCategory->image);
-            self::$imageUrl = self::getImageUrl($request->file('image'));
+            deleteFile(self::$subCategory->image);
+            self::$imageUrl = getFileUrl($request->file('image'), 'upload/subCategory-image/');
         }
         else
         {
@@ -47,7 +38,7 @@ class SubCategory extends Model
     public static function deleteSubCategory($id)
     {
         self::$subCategory = SubCategory::find($id);
-        self::deleteImageFormFolder(self::$subCategory->image);
+        deleteFile(self::$subCategory->image);
         self::$subCategory->delete();
     }
 
@@ -62,13 +53,6 @@ class SubCategory extends Model
         $subCategory->save();
     }
 
-    private static function deleteImageFormFolder($imageUrl)
-    {
-        if (file_exists($imageUrl))
-        {
-            unlink($imageUrl);
-        }
-    }
     public function category()
     {
         return $this->belongsTo(Category::class);

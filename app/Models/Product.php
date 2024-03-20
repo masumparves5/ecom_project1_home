@@ -11,19 +11,10 @@ class Product extends Model
 
     private static $product, $image, $extension, $imageName, $directory, $imageUrl;
 
-    private static function getImageUrl($image)
-    {
-        self::$extension    = $image->getClientOriginalExtension();
-        self::$imageName    = time().'.'.self::$extension;
-        self::$directory    = 'upload/product-images/';
-        $image->move(self::$directory, self::$imageName);
-        self::$imageUrl     = self::$directory.self::$imageName;
-        return self::$imageUrl;
-    }
 
     public static function newProduct($request)
     {
-        return self::saveBasicInfo(new Product(), $request, self::getImageUrl($request->file('image')));
+        return self::saveBasicInfo(new Product(), $request, getFileUrl($request->file('image'), 'upload/product-images/'));
     }
 
     public static function updateProduct($request, $id)
@@ -31,8 +22,8 @@ class Product extends Model
         self::$product = Product::find($id);
         if (self::$image = $request->file('image'))
         {
-            self::deleteImageFormFolder(self::$product->image);
-            self::$imageUrl = self::getImageUrl($request->file('image'));
+            deleteFile(self::$product->image);
+            self::$imageUrl = getFileUrl($request->file('image'), 'upload/product-images/');
         }
         else
         {
@@ -44,7 +35,7 @@ class Product extends Model
     public static function deleteProduct($id)
     {
         self::$product = Product::find($id);
-        self::deleteImageFormFolder(self::$product->image);
+        deleteFile(self::$product->image);
         self::$product->delete();
     }
 
@@ -69,13 +60,6 @@ class Product extends Model
         return $product;
     }
 
-    private static function deleteImageFormFolder($imageUrl)
-    {
-        if (file_exists($imageUrl))
-        {
-            unlink($imageUrl);
-        }
-    }
 
     public function category()
     {

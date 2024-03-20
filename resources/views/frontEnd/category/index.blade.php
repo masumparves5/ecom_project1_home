@@ -186,7 +186,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-info">
-                                                <span class="category">{{$product->category->name}}</span>
+                                                <span class="category">{{$product->category->name}} > {{$product->subCategory->name}}</span>
                                                 <h4 class="title">
                                                     <a href="{{route('single.product', [ 'id'=> $product->id])}}">{{$product->name}}</a>
                                                 </h4>

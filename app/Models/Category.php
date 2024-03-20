@@ -10,33 +10,21 @@ class Category extends Model
 {
     use HasFactory;
 
-    private static $category, $image, $imageName, $imageUrl, $directory, $extension;
-
-    private static function getImageUrl($image)
-    {
-        self::$extension    = $image->getClientOriginalExtension();
-        self::$imageName    = time().'.'.self::$extension;
-        self::$directory    = 'upload/category-image/';
-        $image->move(self::$directory, self::$imageName);
-        self::$imageUrl     =self::$directory.self::$imageName;
-        return self::$imageUrl;
-    }
-
+    private static $category, $image, $imageUrl;
 
     public static function newCategory($request)
     {
-        self::saveBasicInfo(New Category(), $request, self::getImageUrl($request->file('image')));
+        self::saveBasicInfo(New Category(), $request, getFileUrl($request->file('image'), 'upload/category-image/'));
     }
-
 
     public static function updateCategory($request, $id)
     {
         self::$category = Category::find($id);
 
-        if ($request->file('image'))
+        if (self::$image = $request->file('image'))
         {
-            self::deleteImageFormFolder(self::$category->image);
-            self::$imageUrl = self::getImageUrl($request->file('image'));
+            deleteFile(self::$category->image);
+            self::$imageUrl = getFileUrl(self::$image, 'upload/category-image/');
         }
         else
         {
@@ -49,7 +37,7 @@ class Category extends Model
     public static function deleteCategory($id)
     {
         self::$category = Category::find($id);
-        self::deleteImageFormFolder(self::$category->image);
+        deleteFile(self::$category->image);
         self::$category->delete();
     }
 
@@ -61,14 +49,6 @@ class Category extends Model
         $category->image          = $imageUrl;
         $category->status         = $request->status;
         $category->save();
-    }
-
-    private static function deleteImageFormFolder($imageUrl)
-    {
-        if (file_exists($imageUrl))
-        {
-            unlink($imageUrl);
-        }
     }
 
     public function subCategory()

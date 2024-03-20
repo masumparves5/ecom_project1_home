@@ -7,7 +7,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="breadcrumbs-content">
-                        <h1 class="page-title">Single Product</h1>
+                        <h1 class="page-title">Product</h1>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-12">
@@ -24,6 +24,8 @@
 
     <section class="item-details section">
         <div class="container">
+            <form action="{{route('card.add', ['id' => $product->id])}}" method="POST">
+                @csrf
             <div class="top-area">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-12">
@@ -43,15 +45,21 @@
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
                             <h2 class="title">{{$product->name}}</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
+                            <p class="category"><i class="lni lni-tag"></i> {{$product->category->name}}:<a href="{{route('product.category', ['id' => $product->category->id])}}">Action
                                     cameras</a></p>
                             <h3 class="price">Tk :{{$product->selling_price}}<span>{{$product->regular_price}}</span></h3>
                             <p class="info-text">{{$product->short_description}}</p>
+                            <div class="col-lg-4 col-md-4 col-12">
+                                <div class="form-group quantity">
+                                    <label for="color">Quantity</label>
+                                    <input type="number" name="qty" class="form-control" value="1" min="1"/>
+                                </div>
+                            </div>
                             <div class="bottom-content">
                                 <div class="row align-items-end">
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="button cart-button">
-                                            <a class="btn btn-outline-success pt-2" href="">Add to Cart</a>
+                                            <button type="submit" class="btn btn-outline-success">Add to Cart</button>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
@@ -70,6 +78,7 @@
                     </div>
                 </div>
             </div>
+            </form>
             <div class="product-details-info">
                 <div class="single-block">
                     <div class="row">

@@ -874,7 +874,7 @@
                             </a>
                             <ul class="slide-menu">
                                 <li class="side-menu-label1"><a href="javascript:void(0)">Apps</a></li>
-                                <li><a href="calendar2.html" class="slide-item">Calendar</a></li>
+                                <li><a href="{{route('manage.order')}}" class="slide-item">Manage Order</a></li>
                             </ul>
                         </li>
 
@@ -1441,9 +1441,27 @@
 <!-- SWITCHER JS -->
 <script src="{{asset('/')}}admin-assets/assets/switcher/js/switcher.js"></script>
 
+<script>
+    function getSubCategory(categoryId) {
+        $.ajax({
+            type: "GET",
+            url: "{{route('get-sub-category-by-category-id')}}",
+            data: {category_id: categoryId},
+            DataType: "JSON",
+            success: function (response){
+                var option = '';
+                option += '<option value=""> -- Select Sub Category Name -- </option>';
+                $.each(response,function (key, value) {
+                    option += '<option value="'+value.id+'">' +value.name+'</option>';
+                });
+                $('#subCategoryId').empty();
+                $('#subCategoryId').append(option);
+            }
+        });
+    }
+</script>
 </body>
 
 
-<!-- Mirrored from laravel8.spruko.com/noa/index by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 May 2023 13:08:40 GMT -->
 </html>
 

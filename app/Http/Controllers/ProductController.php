@@ -30,6 +30,12 @@ class ProductController extends Controller
             'units'             => Unit::all(),
         ]);
     }
+    private $subCategory;
+    public function getSubCategoryByCategory()
+    {
+        $this->subCategory = SubCategory::where('category_id', $_GET['category_id'])->get();
+        return response()->json($this->subCategory);
+    }
     public function detail($id)
     {
         return view('admin.product.detail', [
@@ -39,6 +45,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->product = Product::newProduct($request);
+        return $this->product;
         ProductImage::newProductImage($request->file('other_image'), $this->product->id);
         return back()->with('message', 'Product info save successfully.');
     }

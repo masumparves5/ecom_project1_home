@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
-<!-- Mirrored from demo.graygrids.com/themes/shopgrids/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Feb 2022 10:56:23 GMT -->
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
@@ -26,7 +25,7 @@
 <![endif]-->
 
 <div class="preloader">
-    <div class="preloader-inner">
+    <div class="preloader-inner">F
         <div class="preloader-icon">
             <span></span>
             <span></span>
@@ -74,27 +73,40 @@
                 <div class="col-lg-4 col-md-4 col-12">
                     <div class="top-middle">
                         <ul class="useful-links">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{{route('home')}}">Home</a></li>
                             <li><a href="about-us.html">About Us</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-12">
-                    <div class="top-end">
-                        <div class="user">
-                            <i class="lni lni-user"></i>
-                            Hello
+                    @if(Session::get('customer_id'))
+                        <div class="top-end">
+                            <div class="user">
+                                <i class="lni lni-user"></i>
+                                Hello {{Session::get('customer_name')}}
+                            </div>
+                            <ul class="user-login">
+                                <li>
+                                    <a href="{{route('customer.dashboard')}}">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('customer.logout')}}">Logout</a>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="user-login">
-                            <li>
-                                <a href="login.html">Sign In</a>
-                            </li>
-                            <li>
-                                <a href="register.html">Register</a>
-                            </li>
-                        </ul>
-                    </div>
+                    @else
+                        <div class="top-end">
+                            <ul class="user-login">
+                                <li>
+                                    <a href="{{route('customer.login')}}">Sign In</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('customer.register')}}">Register</a>
+                                </li>
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -106,7 +118,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-3 col-7">
 
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="{{route('home')}}">
                         <img src="{{asset('/')}}frontEnd-assets/assets/images/logo/logo.svg" alt="Logo">
                     </a>
 
@@ -157,41 +169,34 @@
                             <div class="cart-items">
                                 <a href="javascript:void(0)" class="main-btn">
                                     <i class="lni lni-cart"></i>
-                                    <span class="total-items">2</span>
+                                    <span class="total-items">{{count(Cart::content())}}</span>
                                 </a>
 
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>2 Items</span>
-                                        <a href="cart.html">View Cart</a>
+                                        <span>{{count(Cart::content())}} Items</span>
+                                        <a href="{{route('card.show')}}">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        <li>
-                                            <a href="javascript:void(0)" class="remove" title="Remove this item"><i class="lni lni-close"></i></a>
-                                            <div class="cart-img-head">
-                                                <a class="cart-img" href="product-details.html"><img src="{{asset('/')}}frontEnd-assets/assets/images/header/cart-items/item1.jpg" alt="#"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4><a href="product-details.html">
-                                                        Apple Watch Series 6</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" class="remove" title="Remove this item"><i class="lni lni-close"></i></a>
-                                            <div class="cart-img-head">
-                                                <a class="cart-img" href="product-details.html"><img src="{{asset('/')}}frontEnd-assets/assets/images/header/cart-items/item2.jpg" alt="#"></a>
-                                            </div>
-                                            <div class="content">
-                                                <h4><a href="product-details.html">Wi-Fi Smart Camera</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                            </div>
-                                        </li>
+                                        @php($sum=0)
+                                        @foreach(Cart::content() as $cartItem)
+                                            <li>
+                                                <a href="javascript:void(0)" class="remove" title="Remove this item"><i class="lni lni-close"></i></a>
+                                                <div class="cart-img-head">
+                                                    <a class="cart-img" href="{{route('single.product', ['id' => $cartItem->id])}}"><img src="{{asset($cartItem->options->image)}}" alt="#"></a>
+                                                </div>
+                                                <div class="content">
+                                                    <h4><a href="{{route('single.product', ['id' => $cartItem->id])}}">{{$cartItem->name}}</a></h4>
+                                                    <p class="quantity">{{$cartItem->qty}}x{{$cartItem->price}} - <span class="amount">{{round($cartItem->subtotal)}}</span></p>
+                                                </div>
+                                            </li>
+                                            @php($sum = $sum + $cartItem->subtotal)
+                                        @endforeach
                                     </ul>
                                     <div class="bottom">
                                         <div class="total">
                                             <span>Total</span>
-                                            <span class="total-amount">$134.00</span>
+                                            <span class="total-amount">{{round($sum)}}</span>
                                         </div>
                                         <div class="button">
                                             <a href="checkout.html" class="btn animate">Checkout</a>
@@ -217,13 +222,13 @@
                         <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
                         <ul class="sub-category">
                             @foreach($categories as $category)
-                            <li><a href="{{route('product.category', ['id' =>$category->id])}}">{{$category->name}} <i class="lni lni-chevron-right"></i></a>
-                                <ul class="inner-sub-category p-0">
-                                    @foreach($category->subCategory as $subCategory)
-                                    <li><a href="product-grids.html">{{$subCategory->name}}</a></li>
-                                    @endforeach
-                                </ul>
-                            </li>
+                                <li><a href="{{route('product.category', ['id' =>$category->id])}}">{{$category->name}} <i class="lni lni-chevron-right"></i></a>
+                                    <ul class="inner-sub-category p-0">
+                                        @foreach($category->subCategory as $subCategory)
+                                            <li><a href="{{route('product.subCategory', ['id' => $subCategory->id])}}">{{$subCategory->name}}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
@@ -238,7 +243,7 @@
                         <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                             <ul id="nav" class="navbar-nav ms-auto">
                                 <li class="nav-item">
-                                    <a href="index.html" class="active" aria-label="Toggle navigation">Home</a>
+                                    <a href="{{route('home')}}" class="active" aria-label="Toggle navigation">Home</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#submenu-1-2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">Pages</a>
@@ -316,7 +321,7 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-4 col-12">
                         <div class="footer-logo">
-                            <a href="index.html">
+                            <a href="{{route('home')}}">
                                 <img src="{{asset('/')}}frontEnd-assets/assets/images/logo/white-logo.svg" alt="#">
                             </a>
                         </div>
@@ -503,7 +508,7 @@
 
 </script>
 <script>
-    const finaleDate = new Date("February 15, 2023 00:00:00").getTime();
+    const finaleDate = new Date("February 15, 3023 00:00:00").getTime();
 
     const timer = () => {
         const now = new Date().getTime();
@@ -535,6 +540,5 @@
 </script>
 </body>
 
-<!-- Mirrored from demo.graygrids.com/themes/shopgrids/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Feb 2022 10:56:45 GMT -->
 </html>
 
